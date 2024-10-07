@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from pydantic import BaseModel
 
 app = FastAPI()
 
@@ -32,8 +33,22 @@ def quadrado(numero: int):
 
     return {"mensagem": text}
 
-# param Query
-@app.get('/dobro')
+
+# param Query: ?valor=
+@app.get("/dobro")
 def dobro(valor: int):
     result = 2 * valor
     return {"mensagem": f"O dobro do valor {valor} é {result}"}
+
+
+# ----------------------------------------------
+
+
+class Produto(BaseModel):
+    nome: str
+    valor: float
+
+
+@app.post("/produtos")
+def produtos(produto: Produto):
+    return {"mensagem": f"Produto ({produto.nome}) - R$ ({produto.valor}), cadastrado com sucesso!"}
